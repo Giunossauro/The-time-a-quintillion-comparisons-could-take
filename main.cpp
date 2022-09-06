@@ -2,37 +2,42 @@
 #include <ctime>
 
 int main() {
-    uint16_t p[1000], m[1000], d, e;
-    uint32_t t = clock();
-    uint64_t c = 0, trillion;
+    uint16_t foo[1000], bar[1000];
+    uint32_t startTime = clock(), elapsedTime = 0;
+    uint64_t comparisonsCounter = 0, coutMarkCounter = 0;
 
-    for (d = 0; d < 1000; d++) {
-        p[d] = d;
-        m[d] = 999 - d;
+    for (uint16_t index = 0; index < 1000; ++index) {
+        foo[index] = index;
+        bar[index] = 999 - index;
     }
-	
-    for (trillion = 1; trillion < 1500000000000; trillion++) {
-        for (d = 0; d < 1000; d++) {
-            for (e = 0; e < 1000; e++) {
-                if (p[d] == m[e]) {
-                    c++;
+
+    for (uint64_t trillionCounter = 1; trillionCounter < 1000000000000; ++trillionCounter) {
+        for (uint16_t fooIndex = 0; fooIndex < 1000; ++fooIndex) { //quatrillion
+            for (uint16_t barIndex = 0; barIndex < 1000; ++barIndex) { //quintillion
+                if (foo[fooIndex] == bar[barIndex]) {
+                    ++comparisonsCounter;
                 }
             }
         }
-        if (trillion % 100000 == 0) {
-            std::cout << "c: " << c << std::endl;
-            c = ((clock() - t) / 1000);
+
+	// Consider that for each iteration of trillionCounter
+	//there are 1.000.000 more iterations over the comparisons between foo and bar.
+	// This is visible in conparisonsCounter.
+        if (trillionCounter % 10000 == 0) { // this means 10.000.000.000 of comparisons
+            ++coutMarkCounter;
+            std::cout << "comparisonsCounter: " << comparisonsCounter << std::endl;
+            elapsedTime = ((clock() - startTime) / 1000);
             std::cout <<
-                "After a 100 billion, the elapsed time is: " <<
-                c <<
-                " seconds.\nThis means that this should take about: " <<
-                (((c * 25000000) / 60) / 60) / 24 <<
-                " days to finish in your machine!\n" <<
-                "(this is: " <<
-                ((((c * 25000000) / 60) / 60) / 24) / 365 <<
+                "After a 100 billion comparisons, the elapsed time is: " <<
+                elapsedTime <<
+                " seconds.\nThis means that whole this should take about: " <<
+                ((((elapsedTime * 2500000) / 60) / 60) / 24) / coutMarkCounter <<
+		// 2500000 because 2.500.000 * 100.000.000.000 is 2.5^18
+                " days to finish in your machine!\n(this is: " <<
+                (((((elapsedTime * 2500000) / 60) / 60) / 24) / 365) / coutMarkCounter <<
                 " years!!\nNow split this number by the number of threads you have" <<
-                " and realize the it's impossible to calculate with CPU...\n" <<
-                "My best regards and thanks for testing!" <<
+                " and realize the it's almost impossible to calculate with CPU...\n" <<
+                "My best regards and thanks for testing!\n\n\n" <<
             std::endl;
         }
     }
